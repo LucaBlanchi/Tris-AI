@@ -19,6 +19,8 @@
 # Cambiare e**x con un'exp
 # Aggiungere la possibilità di cambiare la profondità
 # Capire come funziona la lambda nel sorting
+# Riscrivere le variabili e i commenti in inglese
+# Mostrare il costo sul terminale aggiornandolo
 
 import numpy as np
 from random import randrange
@@ -111,7 +113,7 @@ class Network(object):
             network.expected=data[n][1]
             network.calcola_network()
             network.back_propagation()
-            print(network.costo())
+            print(n, network.costo())
 
 # Caricamento dei training data
 data=[[[0 for i in range (18)],[0 for j in range (0,9)]] for k in range (12)]
