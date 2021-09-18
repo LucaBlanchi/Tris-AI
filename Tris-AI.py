@@ -1,6 +1,5 @@
 # --- TO DO LIST ---
 #
-# Oggettificare il network
 # Creare più parametri
 # Vettorializzare la backpropagation
 # Aggiungere training data
@@ -18,6 +17,7 @@
 # Cambiare il percorso file dei training data
 # Semplificare la raccolta di training data
 # Renderla una rete convolutiva
+# Cambiare e**x con un exp
 
 import numpy as np
 from random import randrange
@@ -25,71 +25,79 @@ from random import randrange
 e=2.7182818284590
 s=0.15 # Step size
 
-# Inizializzazione del Network
-l1=[0 for i in range (0,4)] # Layer (senza input layer)
-l2=[0 for i in range (0,4)]
-lo=[0 for i in range (0,9)]
-p1=[0 for i in range (0,4)] # Copia dei layer, per tenere il risultato prima di applicare la sigmoide
-p2=[0 for i in range (0,4)]
-po=[0 for i in range (0,9)]
-w1=[[0.5 for i in range (0,4)] for j in range (0,18)] # Pesi
-w2=[[0.5 for i in range (0,4)] for j in range (0,4)]
-wo=[[0.5 for i in range (0,9)] for j in range (0,4)]
-b1=[0 for i in range (0,4)] # Bias
-b2=[0 for i in range (0,4)]
-bo=[0 for i in range (0,9)]
-
 # Funzioni matematiche utili
 def sigmoid(x):
     return 1/(1+e**(-x))
 def d_sigmoid(x):
     return sigmoid(x)*(1-sigmoid(x))
 
-# Calcola il network in base a pesi, bias e input
-def calcola_output(li,w1,w2,wo,b1,b2,bo):
-    p1=np.dot(li,w1)+b1
-    l1=sigmoid(p1)
-    p2=np.dot(l1,w2)+b2
-    l2=sigmoid(p2)
-    po=np.dot(l2,wo)+bo
-    lo=sigmoid(po)
-    return [p1,p2,po,l1,l2,lo]
+class Network(object):
+    
+    # Inizializzazione del Network
+    def __init__(self):
+        self.li=[0 for i in range (0,18)] # Layer
+        self.l1=[0 for i in range (0,4)]
+        self.l2=[0 for i in range (0,4)]
+        self.lo=[0 for i in range (0,9)]
+        self.expected=[0 for i in range (0,9)] # Output corretto
+        self.p1=[0 for i in range (0,4)] # Copia dei layer, per tenere il risultato prima di applicare la sigmoide
+        self.p2=[0 for i in range (0,4)]
+        self.po=[0 for i in range (0,9)]
+        self.w1=[[0.5 for i in range (0,4)] for j in range (0,18)] # Pesi
+        self.w2=[[0.5 for i in range (0,4)] for j in range (0,4)]
+        self.wo=[[0.5 for i in range (0,9)] for j in range (0,4)]
+        self.b1=[0 for i in range (0,4)] # Bias
+        self.b2=[0 for i in range (0,4)]
+        self.bo=[0 for i in range (0,9)]
 
-# Cost function quadratica
-def costo(lo,expected):
-    return np.linalg.norm(lo-expected)
+    # Calcola il network in base a pesi, bias e input
+    def calcola_output(self):
+        self.p1=np.dot(self.li,self.w1)+self.b1
+        self.l1=sigmoid(self.p1)
+        self.p2=np.dot(self.l1,self.w2)+self.b2
+        self.l2=sigmoid(self.p2)
+        self.po=np.dot(self.l2,self.wo)+self.bo
+        self.lo=sigmoid(self.po)
+        return
 
-# Backpropagation
-def back_propagation(li,l1,l2,w1,w2,wo,b1,b2,bo,expected,p1,p2,po):
-    do=np.multiply((lo-expected),d_sigmoid(po))
-    d2=np.multiply(np.dot(wo,do),d_sigmoid(p2))
-    d1=np.multiply(np.dot(w2,d2),d_sigmoid(p1))
-    
-    dc_b1=d1
-    dc_b2=d2
-    dc_bo=do
-    
-    b1=b1-s*dc_b1
-    b2=b2-s*dc_b2
-    bo=bo-s*dc_bo
-    
-    dc_w1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    dc_w2=[0,0,0,0]
-    dc_wo=[0,0,0,0]
-    
-    for i in range (0,18):
-        dc_w1[i]=li[i]*d1
-        w1[i]=w1[i]-s*li[i]*d1
-    
-    for i in range (0,4):
-        dc_w2[i]=l1[i]*d2
-        w2[i]=w2[i]-s*l1[i]*d2
+    # Cost function quadratica
+    def costo(self):
+        return np.linalg.norm(self.lo-self.expected)
+
+    # Back propagation
+    def back_propagation(self):
+        do=np.multiply((self.lo-self.expected),d_sigmoid(self.po))
+        d2=np.multiply(np.dot(self.wo,do),d_sigmoid(self.p2))
+        d1=np.multiply(np.dot(self.w2,d2),d_sigmoid(self.p1))
         
-    for i in range (0,4):
-        dc_wo[i]=l2[i]*do
-        wo[i]=wo[i]-s*l2[i]*do
+        dc_b1=d1
+        dc_b2=d2
+        dc_bo=do
+        
+        self.b1=self.b1-s*dc_b1
+        self.b2=self.b2-s*dc_b2
+        self.bo=self.bo-s*dc_bo
+        
+        dc_w1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        dc_w2=[0,0,0,0]
+        dc_wo=[0,0,0,0]
+        
+        for i in range (0,18):
+            dc_w1[i]=self.li[i]*d1
+            self.w1[i]=self.w1[i]-s*self.li[i]*d1
+        
+        for i in range (0,4):
+            dc_w2[i]=self.l1[i]*d2
+            self.w2[i]=self.w2[i]-s*self.l1[i]*d2
+            
+        for i in range (0,4):
+            dc_wo[i]=self.l2[i]*do
+            self.wo[i]=self.wo[i]-s*self.l2[i]*do
 
-    return [w1,w2,wo,b1,b2,bo]
+        return
+
+# Creazione Network
+network=Network()
 
 # Caricamento dei training data
 data=[[[0 for i in range (0,18)],[0 for j in range (0,9)]] for k in range (0,12)]
@@ -103,21 +111,24 @@ f.close()
 # Procedura di Training
 for i in range (0,35000):
     n=randrange(12)
-    [p1,p2,po,l1,l2,lo]=calcola_output(data[n][0],w1,w2,wo,b1,b2,bo)
-    [w1,w2,wo,b1,b2,bo]=back_propagation(data[n][0],l1,l2,w1,w2,wo,b1,b2,bo,data[n][1],p1,p2,po)
-    print(costo(calcola_output(data[n][0],w1,w2,wo,b1,b2,bo)[5], data[n][1]))
+    network.li=data[n][0]
+    network.expected=data[n][1]
+    network.calcola_output()
+    network.back_propagation()
+    print(network.costo())
 
 # Test del Network
 while True:
     print()
     m=int(input("Choose data: "))
+    network.li=data[m][0]
     print()
     print("L'output layer è:")
-    o=calcola_output(data[m][0],w1,w2,wo,b1,b2,bo)[5]
-    print(o)
+    network.calcola_output()
+    print(network.lo)
     print()
     print("L'ordine di preferenza delle mosse è:")
-    m=sorted(range(len(o)), key=lambda k: o[k])
+    m=sorted(range(len(network.lo)), key=lambda k: network.lo[k])
     m.reverse()
     print(m)
     print()
