@@ -1,7 +1,7 @@
 # Tris-AI
 Machine learning applicato al tris, senza utilizzo di librerie astratte.
 
-*** // STATO ATTUALE DEL PROGETTO // ***
+*** STATO ATTUALE DEL PROGETTO ***
 La rete è in grado di memorizzare mediamente oltre metà delle mosse fornite. Le altre mosse solitamente figurano come la seconda o la terza favorita. Questa limitazione è probabilmente causata dalla (temporaneamente) mancanza di un SoftMaxing dell'ultimo layer. Per far sì che da un piccolo set di mosse, la rete possa inferire nuove mosse vincenti, sarà probabilmente necessario cambiare il calcolo del primo layer, ispirandosi alle reti convolutive per la computer vision. Altri miglioramenti applicabili sono elencati nella TO_DO_LIST.
 
 -- main.py --
