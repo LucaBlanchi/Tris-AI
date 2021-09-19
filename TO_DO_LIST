@@ -1,0 +1,21 @@
+Vettorializzare la backpropagation
+Suddividere il progetto in più file
+Aggiungere training data
+Dare i training data a pacchetti
+Testare diverse procedure di scelta dei training data
+Testare altre cost function (Cross entropy?)
+Migliorare l'interazione con l'utente da terminale
+Migliorare l'inizializzazione del network
+Implementare regolarizzazione (?)
+Implementare softmaxing (?)
+Testare diverse dimensioni del network
+Testare differenti step size
+Testare differenti iterazioni totali di training
+Cambiare il percorso file dei training data
+Semplificare la raccolta di training data
+Renderla una rete convolutiva
+Cambiare e**x con un'exp
+Aggiungere la possibilità di cambiare la profondità
+Capire come funziona la lambda nel sorting
+Riscrivere le variabili e i commenti in inglese
+Mostrare il costo sul terminale aggiornandolo
