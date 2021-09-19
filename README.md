@@ -1,6 +1,4 @@
 # Tris-AI
-Machine learning applicato al tris, senza utilizzo di librerie astratte.
-
 -- main.py --
 All'avvio del main, inizierà il processo di training del network. Sul terminale apparirà il costo associato al training example appena utilizzato. Alla fine, l'utente potrà inserire un numero corrispondente ad un training example, ed ottenere l'output layer del network, e una lista contenente le mosse nell'ordine di preferenza del network. Nel file data.txt è contenuta la lista delle mosse corrette associate a ciascun training example. Al momento i training data consistono di 12 esempi, è possibile dunque testare solo gli esempi tra lo 0 e l'11. Il codice del main contiene i parametri relativi alla step size, al numero di iterazioni del training, e alla dimensione dei due layer intermedi del network.
 
